@@ -9,8 +9,11 @@ function ThankUser() {
 
   //---
   const UserName = JSON.parse(window.localStorage.getItem("personal_details"));
+
   const redirect_to_main_page = () => {
-    window.location.replace("./UserRegistration");
+    console.log("Hii");
+    localStorage.clear();
+    window.location.replace('./UserRegistration');
   };
 
   return (

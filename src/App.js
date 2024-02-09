@@ -8,6 +8,7 @@ import EducationInfo from "./Form Pages/Page Form/UserEducationData";
 import JobInfo from "./Form Pages/Page Form/UserJobData";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import UserDataDisplay from "./Form Pages/Page Form/UserAllDataDisplay";
+import NavBar from "./Form Pages/Navbar Form/navbar";
 
 function App() {
   window.history.pushState(null, "", window.location.href);
@@ -15,7 +16,7 @@ function App() {
     window.history.pushState(null, "", window.location.href);
     alert("You cannot navigate in between forms");
   };
-
+  
   const [isLoading, setIsLoading] = useState(true);
   setTimeout(() => {
     setIsLoading(false);
@@ -24,6 +25,9 @@ function App() {
   return (
     <>
       <div>
+        <div>
+          <NavBar/>
+        </div>
         {isLoading ? (
           <ScreenLoading />
         ) : (
@@ -36,6 +40,8 @@ function App() {
               <Route element={<ScreenLoading />} path="/loading" />
               <Route element={<UserDataDisplay />} path="/UserAllDataDisplay" />
               <Route element={<ThankUser />} path="/FormThanks" />
+              <Route element={<NavBar />} path="/navbar" />
+              <Route element={<UserRegistration/>} path="/UserRegistration" />
             </Routes>
           </Router>
         )}
