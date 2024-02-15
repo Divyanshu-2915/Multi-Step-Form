@@ -58,7 +58,7 @@ function UserRegistration() {
                 autoComplete="off"
                 name="email"
                 placeholder="Email Address"
-                value={values.email}
+                value={values.email.toLocaleLowerCase()}
                 onChange={handleChange}
                 onBlur={handleBlur}
               />

@@ -10,6 +10,20 @@ const education_initialValues = {
   cgpa: "",
 };
 
+const education_course_list = [
+  {id: 0, name: "-----"},
+  {id: 1, name: "BCA"},
+  {id: 2, name: "BBA"},
+  {id: 3, name: "B. Com"},
+  {id: 4, name: "B. Tech"},
+  {id: 5, name: "B. Pharma"},
+  {id: 6, name: "MBBS"},
+  {id: 7, name: "BA"},
+  {id: 8, name: "BSC"},
+  {id: 9, name: "LLB"},
+  {id: 10, name: "LLM"},
+]
+
 function EducationInfo() {
   window.history.pushState(null, "", window.location.href);
   window.onpopstate = function () {
@@ -53,7 +67,7 @@ function EducationInfo() {
             htmlFor="university"
             className="block text-gray-700 text-sm font-bold mb-2"
           >
-            School/University Name
+            School/University Name*
           </label>
           <input
             type="text"
@@ -74,18 +88,21 @@ function EducationInfo() {
             htmlFor="course"
             className="block text-gray-700 text-sm font-bold mb-2"
           >
-            Degree/Course
+            Degree/Course*
           </label>
-          <input
+          <select
             type="text"
             autoComplete="off"
             name="course"
-            placeholder="BCA, BBA, Etc."
             value={values.course}
             onChange={handleChange}
             onBlur={handleBlur}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
+          >
+          {education_course_list.map((index) => (
+            <option key={index} value={index.name}> {index.name}</option>
+          ))}
+          </select>
           {errors.course && touched.course ? (
             <p className="text-red-500 text-xs italic">{errors.course}</p>
           ) : null}
@@ -95,7 +112,7 @@ function EducationInfo() {
             htmlFor="date"
             className="block text-gray-700 text-sm font-bold mb-2"
           >
-            Date of Graduation
+            Date of Graduation*
           </label>
           <input
             type="date"
@@ -103,7 +120,6 @@ function EducationInfo() {
             name="date"
             min="1995-01-01"
             max="2020-12-31"
-            placeholder=""
             value={values.date}
             onChange={handleChange}
             onBlur={handleBlur}
@@ -118,7 +134,7 @@ function EducationInfo() {
             htmlFor="field"
             className="block text-gray-700 text-sm font-bold mb-2"
           >
-            Major Field of Study
+            Major Field of Study*
           </label>
           <input
             type="text"
@@ -139,7 +155,7 @@ function EducationInfo() {
             htmlFor="cgpa"
             className="block text-gray-700 text-sm font-bold mb-2"
           >
-            CGPA/ Percentage
+            CGPA*
           </label>
           <input
             type="text"

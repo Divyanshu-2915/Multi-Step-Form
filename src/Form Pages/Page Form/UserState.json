@@ -2,7 +2,9 @@
     "error": false,
     "message": "Indian State and Citites",
     "States": [
-        
+        {
+            "name": "------"
+        },
         {
             "name": "Andaman and Nicobar Islands",
             "city": [

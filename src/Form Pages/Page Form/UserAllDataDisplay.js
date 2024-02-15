@@ -13,7 +13,7 @@ function UserDataDisplay() {
     personal_details: {},
     education_details: {},
     experience_details: {},
-  });
+});
 
   useEffect(() => {
     const registrationForm = JSON.parse(
@@ -42,9 +42,25 @@ function UserDataDisplay() {
   return (
     <div className="container mx-auto p-4 font-serif">
       <div className="border p-4 rounded-md">
-        {Object.keys(userFormData).map((section, index) => (
+      </div>
+      <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        onClick={() => {
+          window.location.replace("./FormThanks");
+        }}
+      >
+        Submit Data{" "}
+      </button>
+    </div>
+  );
+}
+
+export default UserDataDisplay;
+
+{/*
+{Object.keys(userFormData).map((section, index) => (
           <div key={index} className="mb-6">
-            <h2 className="text-xl font-bold mb-2">{section}</h2>
+            <h2 className="text-xl font-bold mb-2" key={section}> Registration Details</h2>
             <ul>
               {Object.keys(userFormData[section]).map((key, idx) => (
                 <li key={idx} className="mb-2">
@@ -57,16 +73,4 @@ function UserDataDisplay() {
             </ul>
           </div>
         ))}
-      </div>
-      <button
-        onClick={() => {
-          window.location.replace("./FormThanks");
-        }}
-      >
-        Submit Data{" "}
-      </button>
-    </div>
-  );
-}
-
-export default UserDataDisplay;
+ */}

@@ -15,9 +15,9 @@ export const Registration_Validate = Yup.object({
 
 export const Education_Validate = Yup.object({
     university: Yup.string().required('University name is required'),
-    course: Yup.string().min(3).max(6).required('Course/Degree is required'),
-    date: Yup.date().required('Date of completation is required'),
+    course: Yup.string().required('Course/Degree is required'),
+    date: Yup.date().required('Date of completation is required').min(new Date('1995-01-01'), 'Date must be after or equal to 01-01-1995').max(new Date('2010-12-31'), 'Date must be before or equal to 31-12-2010'),
     field: Yup.string().required('This field is required'),
-    cgpa: Yup.string().required('CGPA is required')
+    cgpa: Yup.number().required('CGPA is required').min(4.5, 'CGPA must be at least 4.5').max(9.8, 'CGPA cannot exceed 9.8')
 });
 

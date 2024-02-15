@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import StateData from "./UserState.json";
+import { DatePicker } from 'react-datepicker';
 
 function UserDetails() {
   window.history.pushState(null, "", window.location.href);
@@ -28,9 +29,22 @@ function UserDetails() {
     first_name: "",
     last_name: "",
     dob: "",
-    email: "",
     number: "",
+    state: "",
+    city: "",
+    pin: ""
   });
+
+  const validatePhoneNumber = (value) => {
+    const validation_statement = /^[(]?\d{3}[)]?[-]?\d{3}[-]?\d{4}$/;
+    if (value.length > 10) {
+      return "Phone number should not be more than 10 digits";
+    }
+    if (!validation_statement.test(value)) {
+      return "Phone number should contain only digits follow the pattern xxxx-xxxxxx";
+    }
+    return true;
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -49,28 +63,34 @@ function UserDetails() {
       >
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">
-            First Name
+            First Name*
           </label>
+
           <input
             className="border border-gray-300 rounded-md p-2 w-full"
             placeholder="First Name"
             {...register("first_name", { required: "This field is required" })}
           />
-          <p className="text-red-500">{errors.first_name?.message}</p>
+          {errors.first_name && (
+            <p className="text-red-500 text-xs mt-1">{errors.first_name.message}</p>
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">
-            Last Name
+            Last Name*
           </label>
           <input
             className="border border-gray-300 rounded-md p-2 w-full"
             placeholder="Last Name"
             {...register("last_name", { required: "This field is required" })}
           />
+          {errors.last_name && (
+            <p className="text-red-500 text-xs mt-1">{errors.last_name.message}</p>
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">
-            Date Of Birth
+            Date Of Birth*
           </label>
           <input
             type="date"
@@ -80,16 +100,16 @@ function UserDetails() {
               required: "This field is required",
               validate: (value) => {
                 const selectedDate = new Date(value);
-                const minDate = new Date("1985-01-01");
-                const maxDate = new Date("2000-12-31");
+                const minDate = new Date("1995-01-01");
+                const maxDate = new Date("2010-12-31");
                 if (selectedDate < minDate || selectedDate > maxDate) {
-                  return "Date of birth should be between 1985 and 2000";
+                  return "Date of birth should be between 1995 and 2010";
                 }
                 return true;
               },
             })}
-            min="1985-01-01"
-            max="2000-12-31"
+            min="1995-01-01"
+            max="2010-12-31"
           />
           {errors.dob && (
             <p className="text-red-500 text-xs mt-1">{errors.dob.message}</p>
@@ -97,46 +117,42 @@ function UserDetails() {
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">
-            Email
-          </label>
-          <input
-            className="border border-gray-300 rounded-md p-2 w-full"
-            placeholder="Email Address"
-            {...register("email", { required: "This field is required" })}
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Number
+            Number*
           </label>
           <input
             className="border border-gray-300 rounded-md p-2 w-full"
             placeholder="Phone Number"
-            {...register("number", { required: "This field is required" })}
+            {...register("number", { 
+            required: "This field is required",
+            validate: validatePhoneNumber 
+          })}
           />
+          {errors.number && (
+            <p className="text-red-500 text-xs mt-1">{errors.number.message}</p>
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">
-            State
+            State*
           </label>
           <select
             className="border border-gray-300 rounded-md p-2 w-full"
             {...register("state", { required: "State is required" })}
             onChange={CheckState}
           >
-            <option value="none" disabled hidden>
-              Select Your State
-            </option>
             {StateData.States.map((states, index) => (
               <option key={index} value={states.name}>
                 {states.name}
               </option>
             ))}
           </select>
+          {errors.state && (
+            <p className="text-red-500 text-xs mt-1">{errors.state.message}</p>
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">
-            City
+            City*
           </label>
           <select
             className="border border-gray-300 rounded-md p-2 w-full"
@@ -151,10 +167,13 @@ function UserDetails() {
               </option>
             ))}
           </select>
+          {errors.city && (
+            <p className="text-red-500 text-xs mt-1">{errors.city.message}</p>
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">
-            PIN Code
+            PIN Code*
           </label>
           <input
             className="border border-gray-300 rounded-md p-2 w-full"
@@ -167,6 +186,9 @@ function UserDetails() {
               },
             })}
           />
+          {errors.pin && (
+            <p className="text-red-500 text-xs mt-1">{errors.pin.message}</p>
+          )}
         </div>
         <button
           className="bg-blue-500 text-white px-4 py-2 rounded-md"
@@ -180,3 +202,8 @@ function UserDetails() {
 }
 
 export default UserDetails;
+
+//mockjson server
+//useReducer
+//jest - unit
+//sitest - end to end

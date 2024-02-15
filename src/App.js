@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import ThankUser from "./Form Pages/ThankYou Form/FormThanks";
 import UserRegistration from "./Form Pages/Page Form/UserRegistration";
@@ -18,15 +18,22 @@ function App() {
   };
   
   const [isLoading, setIsLoading] = useState(true);
+  const [isNavbarHidden, setIsNavbarHidden] = useState(false);
   setTimeout(() => {
     setIsLoading(false);
   }, 3000);
+
+  useEffect(() => {
+    if (window.location.pathname.match(/FormThanks/)) {
+      setIsNavbarHidden(true);
+    }
+  },[]);
 
   return (
     <>
       <div>
         <div>
-          <NavBar/>
+        {isNavbarHidden ? (null) : (<NavBar/>)}
         </div>
         {isLoading ? (
           <ScreenLoading />

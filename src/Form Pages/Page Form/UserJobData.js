@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 
 function JobInfo() {
@@ -8,25 +8,50 @@ function JobInfo() {
     alert("You cannot navigate in between forms");
   };
 
-  //----
-  const [experienceData, setExperienceData] = useState([]);
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
+    watch
   } = useForm({
-    job_title: "",
-    company: "",
-    experience: "",
-    position: "",
-    start_date: "",
-    end_date: "",
+    defaultValues: {
+      job_title: "",
+      company: "",
+      experience: "",
+      position: "",
+      start_date: "",
+      end_date: "",
+    }
   });
 
-  const addExperience = (data) => {
-    setExperienceData((prevData) => [...prevData, data]);
-    reset();
+  const start_date = watch("start_date");
+  const end_date = watch("end_date");
+
+  const calculateExperience = () => {
+    const startDate = new Date(start_date);
+    const endDate = new Date(end_date);
+    const today = new Date();
+    if(endDate > today){
+        return ("End date is invalid, it should not be greater than present date");
+    }
+    if( endDate.getDate() === today.getDate()){
+      return ("Present");
+    }
+    else{
+    const startYear = startDate.getFullYear();
+        const endYear = endDate.getFullYear();
+        const startMonth = startDate.getMonth();
+        const endMonth = endDate.getMonth();
+        const startDay = startDate.getDate();
+        const endDay = endDate.getDate();
+
+        let differenceInYears = endYear - startYear;
+        if (endMonth < startMonth || (endMonth === startMonth && endDay < startDay)) {
+            differenceInYears--;
+        }
+
+        return (differenceInYears + " Years");
+    }
   };
 
   return (
@@ -42,7 +67,6 @@ function JobInfo() {
       </h4>
       <form
         onSubmit={handleSubmit((data) => {
-          addExperience(data);
           console.log(data);
           window.localStorage.setItem(
             "experience_details",
@@ -57,7 +81,7 @@ function JobInfo() {
             htmlFor="job_title"
             className="block text-gray-700 text-sm font-bold mb-2"
           >
-            Job Title
+            Job Title*
           </label>
           <input
             type="text"
@@ -75,7 +99,7 @@ function JobInfo() {
             htmlFor="company"
             className="block text-gray-700 text-sm font-bold mb-2"
           >
-            Company Name
+            Company Name*
           </label>
           <input
             type="text"
@@ -93,7 +117,7 @@ function JobInfo() {
             htmlFor="position"
             className="block text-gray-700 text-sm font-bold mb-2"
           >
-            Position/Designation
+            Position/Designation*
           </label>
           <input
             type="text"
@@ -111,7 +135,7 @@ function JobInfo() {
             htmlFor="start_date"
             className="block text-gray-700 text-sm font-bold mb-2"
           >
-            Start Date
+            Start Date*
           </label>
           <input
             type="date"
@@ -125,10 +149,10 @@ function JobInfo() {
         </div>
         <div className="mb-4">
           <label
-            htmlFor="end_end"
+            htmlFor="end_date"
             className="block text-gray-700 text-sm font-bold mb-2"
           >
-            End Date
+            End Date*
           </label>
           <input
             type="date"
@@ -145,29 +169,23 @@ function JobInfo() {
             htmlFor="experience"
             className="block text-gray-700 text-sm font-bold mb-2"
           >
-            Experience
+            Experience (Years)*
           </label>
           <input
             type="text"
-            placeholder="Experience in Years"
+            placeholder="Experience"
             autoComplete="off"
             {...register("experience", { required: "This field is required" })}
+            value={calculateExperience()}
+            readOnly
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
-          <button
-            type="button"
-            onClick={handleSubmit((data) => {
-              addExperience(data);
-              console.log(data);
-            })}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-2"
-          >
-            Add More
-          </button>
           <p className="text-red-500 text-xs italic">
             {errors.experience?.message}
           </p>
         </div>
+
+        {/* Submit Button */}
         <button
           type="submit"
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -175,32 +193,6 @@ function JobInfo() {
           Submit
         </button>
       </form>
-
-      <div>
-        <h2 className="text-lg font-bold mb-2">Added Experiences:</h2>
-        {experienceData.map((data, index) => (
-          <div key={index} className="mb-2">
-            <p>
-              <strong>Job Title:</strong> {data.job_title}
-            </p>
-            <p>
-              <strong>Company Name:</strong> {data.company}
-            </p>
-            <p>
-              <strong>Position/Designation:</strong> {data.position}
-            </p>
-            <p>
-              <strong>Experience:</strong> {data.experience}
-            </p>
-            <p>
-              <strong>Start Date:</strong> {data.start_date}
-            </p>
-            <p>
-              <strong>End Date:</strong> {data.end_date}
-            </p>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }

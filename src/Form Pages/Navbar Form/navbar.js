@@ -48,9 +48,6 @@ function NavBar() {
     } else {
       setIsNavbarDisable(false);
     }
-    if (window.location.pathname.match(/FormThanks/)) {
-      setIsNavbarDisable(true);
-    }
   }, []);
 
   return (
@@ -58,7 +55,7 @@ function NavBar() {
       <div>
         {isNavbarDisable ? (
           <h1 className="text-3xl font-bold text-center mb-2 font-times-new-roman">
-            Thank You for registering
+            Please check your data here
           </h1>
         ) : (
           <div>
@@ -103,7 +100,7 @@ function NavBar() {
                       <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
                     </svg>
                     <span className="hidden sm:inline-flex sm:ms-2">
-                      Personal Info Added
+                      Added
                     </span>
                   </span>
                 </li>
@@ -130,7 +127,7 @@ function NavBar() {
                       <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
                     </svg>
                     <span className="hidden sm:inline-flex sm:ms-2">
-                      Education Info Added
+                      Added
                     </span>
                   </span>
                 </li>
@@ -157,7 +154,7 @@ function NavBar() {
                       <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
                     </svg>
                     <span className="hidden sm:inline-flex sm:ms-2">
-                      Job Info Added
+                      Added
                     </span>
                   </span>
                 </li>
