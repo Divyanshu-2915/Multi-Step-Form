@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.5.1",
+    "@fortawesome/free-solid-svg-icons": "^6.5.1",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@hookform/resolvers": "^3.3.4",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -12,6 +15,7 @@
     "css.gg": "^2.1.1",
     "dayjs": "^1.11.10",
     "formik": "^2.4.5",
+    "node": "^21.6.1",
     "postcss-cli": "^11.0.0",
     "react": "^18.2.0",
     "react-datepicker": "^6.1.0",

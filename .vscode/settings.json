@@ -1,0 +1,8 @@
+{
+    "editor.autoIndent": "brackets",
+    "[javascriptreact]": {
+        "editor.autoIndent": "brackets",
+        "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+        "editor.bracketPairColorization.enabled": false
+    }
+}

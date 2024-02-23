@@ -8,7 +8,7 @@ function ThankUser() {
   };
 
   //---
-  const UserName = JSON.parse(window.localStorage.getItem("personal_details"));
+  const UserName = JSON.parse(window.localStorage.getItem("Personal details"));
 
   const redirect_to_main_page = () => {
     console.log("Hii");
@@ -18,9 +18,9 @@ function ThankUser() {
 
   return (
     <div className="container mx-auto mt-10">
-      <div className="main-box bg-blue-200 p-5 rounded-lg">
+      <div className="main-box p-5 rounded-lg">
         <h1 className="text-3xl font-bold mb-4">
-          Thank You For The Information {UserName.first_name}
+          Thank You For The Information
         </h1>
         <h4>Your details have been submitted to us</h4>
       </div>

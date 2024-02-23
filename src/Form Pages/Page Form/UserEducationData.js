@@ -1,12 +1,16 @@
 import React from "react";
 import { useFormik } from "formik";
 import { Education_Validate } from "../Page Form";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSchool, faBook, faPercentage, faGraduationCap, faBookOpen} from '@fortawesome/free-solid-svg-icons'
+import { library } from "@fortawesome/fontawesome-svg-core";
+import './main_form.css';
 
 const education_initialValues = {
   university: "",
   course: "",
   date: "",
-  field: "",
+  subject: "",
   cgpa: "",
 };
 
@@ -25,13 +29,7 @@ const education_course_list = [
 ]
 
 function EducationInfo() {
-  window.history.pushState(null, "", window.location.href);
-  window.onpopstate = function () {
-    window.history.pushState(null, "", window.location.href);
-    alert("You cannot navigate in between forms");
-  };
-
-  //---
+  library.add(faBookOpen, faGraduationCap, faPercentage, faSchool, faBook);
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
       initialValues: education_initialValues,
@@ -39,148 +37,114 @@ function EducationInfo() {
       onSubmit: (values, action) => {
         action.resetForm();
         console.log(values);
-        window.localStorage.setItem(
-          "education_details",
-          JSON.stringify(values)
-        );
+        window.localStorage.setItem("Education Details",JSON.stringify(values));
         window.location.replace("./UserJobData");
-      },
-    });
+        },
+        });
+      const user_education_fields = {
+        "categories" : [
+          {
+            "heading" : "School/ University Name",
+            "type" : "text",
+            "name": "university",
+            "placeholder" : "University Name",
+            "icon" : faSchool
+          },
+          {
+            "heading" : "Course ",
+            "type" : "select",
+            "name": "course",
+            "placeholder" : "Enter Course",
+            "icon" : faBook
+          },
+          {
+            "heading" : "Date of Graduation",
+            "type" : "date",
+            "name": "date",
+            "placeholder" : "",
+            "icon" : faGraduationCap
+          },
+          {
+            "heading" : "Major Field of Study",
+            "type" : "text",
+            "name": "subject",
+            "placeholder" : "Major Field ",
+            "icon" : faBookOpen
+          },
+          {
+            "heading" : "CGPA",
+            "type" : "text",
+            "name": "cgpa",
+            "placeholder" : "Enter CGPA",
+            "icon" : faPercentage
+          }
+        ]
+      }
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold text-center mb-2 font-times-new-roman">
-        Education Details Form
-      </h1>
-      <h4 className="text-lg font-bold text-center mb-6 font-times-new-roman">
-        Fill all the questioned fields to proceed
-      </h4>
-      <h4 className="text-lg font-bold text-center mb-6 font-times-new-roman">
-        Fill Details about Bachelor's/ Master's only
-      </h4>
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
-      >
-        <div className="mb-4">
-          <label
-            htmlFor="university"
-            className="block text-gray-700 text-sm font-bold mb-2"
-          >
-            School/University Name*
-          </label>
-          <input
-            type="text"
+    <>
+    <div className=" border-2 border-black pb-16 justify-items-start w-full max-h-max" id="second-form">
+    <div className="container max-h-max-content	 w-96 mt-16 ml-40 pb-8 pt-8 px-8 justify-items-center rounded-lg
+    bg-gradient-to-t from-cyan-400 to-blue-400 shadow-gray-400">
+    <h1 className="font-serif	text-2xl text-center text-slate-100 pb-6
+    drop-shadow-2xl shadow-cyan-900">Begin Your Coding Journey </h1>
+    <form onSubmit={handleSubmit}
+    className="justify-center">
+      {user_education_fields.categories.map((field,index) => {
+        return(
+          <div key={index} className="mb-4 relative">
+            <FontAwesomeIcon icon={field.icon} className="text-zinc-50 absolute left-1 top-1" />
+            <label
+            htmlFor={field.name}
+            className="block text-zinc-50 text-base font-serif mb-2 font-times-new-roman ml-8
+                after:content-['*'] after:ml-0.5 after:text-red-500">
+            {field.heading}
+            </label>
+            { field.type === "select" ? (
+              <select
+            type={field.type}
             autoComplete="off"
-            name="university"
-            placeholder="University Name"
-            value={values.university}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-          {errors.university && touched.university ? (
-            <p className="text-red-500 text-xs italic">{errors.university}</p>
-          ) : null}
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="course"
-            className="block text-gray-700 text-sm font-bold mb-2"
-          >
-            Degree/Course*
-          </label>
-          <select
-            type="text"
-            autoComplete="off"
-            name="course"
-            value={values.course}
+            name={field.name}
+            value={values[field.name]}
             onChange={handleChange}
             onBlur={handleBlur}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           >
-          {education_course_list.map((index) => (
-            <option key={index} value={index.name}> {index.name}</option>
+          {education_course_list.map((course) => (
+            <option key={course.id} value={course.name}> {course.name}</option>
           ))}
           </select>
-          {errors.course && touched.course ? (
-            <p className="text-red-500 text-xs italic">{errors.course}</p>
-          ) : null}
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="date"
-            className="block text-gray-700 text-sm font-bold mb-2"
-          >
-            Date of Graduation*
-          </label>
-          <input
-            type="date"
-            autoComplete="off"
-            name="date"
-            min="1995-01-01"
-            max="2020-12-31"
-            value={values.date}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-          {errors.date && touched.date ? (
-            <p className="text-red-500 text-xs italic">{errors.date}</p>
-          ) : null}
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="field"
-            className="block text-gray-700 text-sm font-bold mb-2"
-          >
-            Major Field of Study*
-          </label>
-          <input
-            type="text"
-            autoComplete="off"
-            name="field"
-            placeholder="Field Name"
-            value={values.field}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-          {errors.field && touched.field ? (
-            <p className="text-red-500 text-xs italic">{errors.field}</p>
-          ) : null}
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="cgpa"
-            className="block text-gray-700 text-sm font-bold mb-2"
-          >
-            CGPA*
-          </label>
-          <input
-            type="text"
-            autoComplete="off"
-            name="cgpa"
-            placeholder="Percentage Here"
-            value={values.cgpa}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-          {errors.cgpa && touched.cgpa ? (
-            <p className="text-red-500 text-xs italic">{errors.cgpa}</p>
-          ) : null}
-        </div>
-        <div className="flex items-center justify-between">
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          >
-            Next Step
-          </button>
-        </div>
-      </form>
+            ) : (
+              <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              type={field.type}
+              name={field.name}
+              placeholder={field.placeholder}
+              autoComplete="off"
+              value={values[field.name]}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              />
+            )}
+            {errors[field.name] && touched[field.name] ? (
+              <p className="text-red-700 text-sm italic font-times-new-roman">
+                  {errors[field.name]}
+                </p>
+            ) : null
+            }
+          </div>
+        )
+      })}
+      <button type="submit"
+        className="bg-gradient-to-r from-cyan-500 to-blue-500 shadow-lg shadow-slate-500/50 
+                text-white font-bold py-2 px-4 mt-8 rounded-lg w-80 hover:shadow-white bottom-24"
+      >
+        Submit
+        </button>
+    </form>
     </div>
+    </div>
+    </>
   );
 }
 

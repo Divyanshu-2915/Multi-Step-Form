@@ -11,30 +11,33 @@ import UserDataDisplay from "./Form Pages/Page Form/UserAllDataDisplay";
 import NavBar from "./Form Pages/Navbar Form/navbar";
 
 function App() {
-  window.history.pushState(null, "", window.location.href);
-  window.onpopstate = function () {
-    window.history.pushState(null, "", window.location.href);
-    alert("You cannot navigate in between forms");
-  };
+ // window.history.pushState(null, "", window.location.href);
+ // window.onpopstate = function () {
+ //   window.history.pushState(null, "", window.location.href);
+ //   alert("You cannot navigate in between forms");
+ // };
   
   const [isLoading, setIsLoading] = useState(true);
-  const [isNavbarHidden, setIsNavbarHidden] = useState(false);
+  //const [isNavbarHidden, setIsNavbarHidden] = useState(false);
   setTimeout(() => {
     setIsLoading(false);
   }, 3000);
 
-  useEffect(() => {
-    if (window.location.pathname.match(/FormThanks/)) {
-      setIsNavbarHidden(true);
-    }
-  },[]);
+ // useEffect(() => {
+ //   if (window.location.pathname.match(/FormThanks/)) {
+ //     setIsNavbarHidden(true);
+ //   }
+ // },[]);
 
   return (
     <>
+    
       <div>
+      {/*
         <div>
         {isNavbarHidden ? (null) : (<NavBar/>)}
         </div>
+       
         {isLoading ? (
           <ScreenLoading />
         ) : (
@@ -52,6 +55,8 @@ function App() {
             </Routes>
           </Router>
         )}
+        */}
+        <JobInfo/>
       </div>
     </>
   );
