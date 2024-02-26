@@ -37,7 +37,7 @@ function App() {
         <div>
         {isNavbarHidden ? (null) : (<NavBar/>)}
         </div>
-       
+        
         {isLoading ? (
           <ScreenLoading />
         ) : (
