@@ -57,7 +57,7 @@ function App() {
           </Router>
         )}
         */}
-        <NavBar/>
+        <EducationInfo/>
       </div>
     </>
   );

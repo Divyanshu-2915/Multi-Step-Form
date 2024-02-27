@@ -77,6 +77,9 @@ function SampleJobInfo() {
     const EndDate = new Date(getEndDate);
     const todayDate = new Date();
     const personal_data = JSON.parse(window.localStorage.getItem('Personal Details'));
+    if(!personal_data){
+      return false;
+    }
     const getBirthDate = personal_data.date_of_birth;
     const BirthDate = new Date(getBirthDate);
     const yearsToAdd = 20;

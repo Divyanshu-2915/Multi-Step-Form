@@ -115,6 +115,7 @@ function EducationInfo() {
           ))}
           </select>
             ) : (
+              <div>
               <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               type={field.type}
@@ -125,6 +126,8 @@ function EducationInfo() {
               onChange={handleChange}
               onBlur={handleBlur}
               />
+              {field.name === 'date' && <p className="text-sm text-zinc-50 font-serif">(Mininum age should be 18 years)</p>}
+              </div>
             )}
             {errors[field.name] && touched[field.name] ? (
               <p className="text-red-700 text-sm italic font-times-new-roman">
