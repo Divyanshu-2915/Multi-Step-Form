@@ -104,7 +104,6 @@ function UserDetails()
             {...register("state", { required: "State is required" })}
             onChange={CheckState}
            autoComplete="off">
-          <option value="default">Select Your State</option>
             {StateData.States.map((states, index) => (
               <option key={index} value={states.name}>
                 {states.name}
@@ -115,9 +114,6 @@ function UserDetails()
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             {...register("city", { required: "City is required" })}
           autoComplete="off">
-            <option value="default">
-              Select Your City
-            </option>
             {stateCity.map((city, index) => (
               <option key={index} value={city}>
                 {city}

@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBuildingUser, faCalendar, faBusinessTime, faUserTie, faMapLocationDot, faLaptopCode} from '@fortawesome/free-solid-svg-icons'
 import { library } from "@fortawesome/fontawesome-svg-core";
 import './main_form.css';
+import { durationInYears } from '@progress/kendo-date-math';
 
-function JobInfo() {
-  library.add(faBuildingUser, faBusinessTime, faCalendar, faMapLocationDot, faUserTie, faLaptopCode)
+function SampleJobInfo() {
+  library.add(faBuildingUser, faBusinessTime, faCalendar, faMapLocationDot, faUserTie, faLaptopCode);
+  
   const user_job_fields = {
     "categories" : [
       {
@@ -42,14 +44,16 @@ function JobInfo() {
         "type" : "date",
         "name": "start_date",
         "placeholder" : "",
-        "icon" : faCalendar
+        "icon" : faCalendar,
+        "id" : "start_date_id"
       },
       {
         "heading" : "End Date",
         "type" : "date",
         "name": "end_date",
         "placeholder" : "",
-        "icon" : faCalendar
+        "icon" : faCalendar,
+        "id" : "end_date_id"
       },
       {
         "heading" : "Experience",
@@ -60,46 +64,49 @@ function JobInfo() {
       }
     ]
   }
-  
-  const {register, handleSubmit, formState: { errors, isDirty, isValid }, watch} = useForm({
-    mode: 'onBlur'
-  });
-  const [jobDateError, setJobDateError] = useState({});
-  const personal_data = JSON.parse(window.localStorage.getItem('Personal Details'));
-  const find_birth_date = personal_data.date_of_birth;
-  const getBirthDate = new Date(find_birth_date);
-  const yearsToAdd = 20;
-  getBirthDate.setFullYear(getBirthDate.getFullYear() + yearsToAdd);
-  const startDate = watch('start_date');
-  const getStartDate = new Date(startDate);
-  const endDate = watch('end_date');
-  const getEndDate = new Date(endDate);
-  const todayDate = new Date();
 
-   const check_date = () => {
-      if(getStartDate.getFullYear() < getBirthDate.getFullYear()){
-       setJobDateError(prevError => ({...prevError, error: 'Invalid date, you should be old enough'}));
-       console.log(jobDateError);
-      }else if(getStartDate.getFullYear() > getEndDate.getFullYear()){
-        setJobDateError(prevError => ({...prevError, error: 'Invalid date, Start year is greater than end'}));
-       console.log(jobDateError);
-      } else if(getStartDate.getDate() === getEndDate.getDate()){
-        setJobDateError(prevError => ({...prevError, error: 'Invalid date, Dates are same'}));
-       console.log(jobDateError);
-      } else  if(getEndDate.getDate() < getStartDate.getDate()){
-        setJobDateError(prevError => ({...prevError, error: 'Invalid date, End year is smaller than start'}));
-       console.log(jobDateError);
-      } else if(getEndDate.getDate() > todayDate.getDate()){
-        setJobDateError(prevError => ({...prevError, error: 'Invalid date, End date is greater than today'}));
-       console.log(jobDateError);
-      } else if(getEndDate.getDate() === todayDate.getDate()){
-        
-      } 
-   }
-  //const moveForward = () => {
-  //window.alert("You are not adding any experience");
-  //window.location.replace("./UserAllDisplayData");
-  //}
+  const {register, handleSubmit, formState: { errors, isDirty, isValid }, watch} = useForm({
+    mode: 'onBlur',
+  });
+  const [jobDateErrors, setJobDateErrors] = useState({});
+  const getStartDate = watch('start_date');
+  const getEndDate = watch('end_date');
+  const check_job_dates = () => {
+    console.log('Checking job dates');
+    const StartDate = new Date(getStartDate);
+    const EndDate = new Date(getEndDate);
+    const todayDate = new Date();
+    const personal_data = JSON.parse(window.localStorage.getItem('Personal Details'));
+    const getBirthDate = personal_data.date_of_birth;
+    const BirthDate = new Date(getBirthDate);
+    const yearsToAdd = 20;
+    BirthDate.setFullYear(BirthDate.getFullYear() + yearsToAdd);
+    if(StartDate < BirthDate){
+        setJobDateErrors(prevError => ({...prevError, StartDateError : "Invalid Start Date, You should be old enough"}))
+    }else if(StartDate.getFullYear() > EndDate.getFullYear() && StartDate.getMonth() > EndDate.getMonth()){
+        setJobDateErrors(prevError => ({...prevError, StartDateError : "Invalid End Date, Start Date should be before End Date"}));
+    }else if(StartDate.getMonth() === EndDate.getMonth() && StartDate.getDate() === EndDate.getDate() && StartDate.getFullYear() === EndDate.getFullYear()){
+      setJobDateErrors(prevError => ({...prevError, StartDateError : "Invalid Date, Both dates are same"}));
+    } else if(EndDate > todayDate){
+      setJobDateErrors(prevError => ({...prevError, EndDateError : "Invalid Date, End Date should be less than today date"}));
+    } else {
+      setJobDateErrors({})
+    }
+  }
+
+  const check_experience = () => {
+      console.log('Checking experience');
+      const jobStartDate = new Date(getStartDate);
+      const jobEndDate = new Date(getEndDate);
+      const jobTodayDate = new Date();
+        if(jobEndDate === jobTodayDate) {
+          return("Present Working");
+        } else {
+          const duration = durationInYears(jobStartDate, jobEndDate);
+          return (duration + " Years");
+        }
+      }
+
   return (
     <>
     <div className=" border-2 border-black pb-16 justify-items-start w-full max-h-max grid grid-cols-3 gap-2" 
@@ -132,17 +139,23 @@ function JobInfo() {
                   autoComplete="off"
                   readOnly
                   {...register(field.name)}
+                  value={check_experience()}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
               ) : (field.name === 'start_date' || field.name === 'end_date') ? ( 
+                <div>
                 <input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type={field.type}
                 autoComplete="off"
                 name={field.name}
                 placeholder={field.placeholder}
-                {...register(field.name, {onChange: check_date})}
+                id={field.id}
+                {...register(field.name, {required: "This field is required", 
+                onBlur: (check_job_dates)})}  
               />
+              {field.name === 'start_date' && <p className="text-sm text-zinc-50 font-serif">(Mininum age should be 20 years)</p>}
+              </div>
               ): (( 
               <input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -156,6 +169,12 @@ function JobInfo() {
               {errors[field.name] && (
                 <p className="text-red-700 text-sm italic font-times-new-roman">{errors[field.name].message}</p>
               )}
+              {field.name === 'start_date' ? (jobDateErrors && jobDateErrors.StartDateError ? (
+                <p className="text-red-700 text-sm italic font-times-new-roman">{jobDateErrors.StartDateError}</p>
+              ) : (null) ) : (null)}
+              {field.name === 'end_date' ? (jobDateErrors && jobDateErrors.EndDateError ? (
+                <p className="text-red-700 text-sm italic font-times-new-roman">{jobDateErrors.EndDateError}</p>
+              ) : (null) ) : (null)}
           </div>
         )
       })}
@@ -167,33 +186,9 @@ function JobInfo() {
         </button>
       </form>
       </div>
-      {/*
-      <div className="container w-96 mt-16 pb-8 pt-8 px-8 rounded-lg
-    bg-gradient-to-t from-cyan-400 to-blue-400 shadow-gray-400 h-40">
-    <h1 className="font-serif	text-2xl text-center text-slate-100
-    drop-shadow-2xl shadow-cyan-900">Want to add more</h1>
-      <button
-          className="bg-gradient-to-r from-cyan-500 to-blue-500 shadow-lg shadow-slate-500/50 
-                  text-white font-bold py-2 px-4 mt-4 rounded-lg w-80 hover:shadow-white bottom-24"
-          type="submit">
-          Add More
-        </button>
-        </div>
-      <div className="container w-96 mt-16 pb-8 pt-8 px-8 justify-items-center rounded-lg
-    bg-gradient-to-t from-cyan-400 to-blue-400 shadow-gray-400 h-40">
-    <h1 className="font-serif	text-2xl text-center text-slate-100
-    drop-shadow-2xl shadow-cyan-900">Don't have any experience </h1>
-      <button
-          className="bg-gradient-to-r from-cyan-500 to-blue-500 shadow-lg shadow-slate-500/50 
-                  text-white font-bold py-2 px-4 mt-4 rounded-lg w-80 hover:shadow-white bottom-24"
-          type="submit" onClick={moveForward}>
-          Move Forward Without It
-        </button>
-        </div>
-         */}
       </div>
     </>
   );
 }
 
-export default JobInfo;
+export default SampleJobInfo;

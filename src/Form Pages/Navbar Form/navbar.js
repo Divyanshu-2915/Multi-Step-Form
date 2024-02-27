@@ -1,48 +1,62 @@
-import { useState, useEffect } from "react";
-import "./navbar.css";
-import React from "react";
+import React, { useEffect, useReducer, useState } from 'react';
+import { faCheck, faCheckDouble} from '@fortawesome/free-solid-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-function NavBar() {
-  window.history.pushState(null, "", window.location.href);
-  window.onpopstate = function () {
-    window.history.pushState(null, "", window.location.href);
-    alert("You cannot navigate in between forms");
-  };
+ const initialState = {
+  registration_data: {},
+  personal_data: {},
+  education_data: {},
+  job_data: {},
+ }
 
-  const [isFirstPageFilled, setIsFirstPageFilled] = useState(false);
-  const [isSecondPageFilled, setIsSecondPageFilled] = useState(false);
-  const [isThirdPageFilled, setIsThirdPageFilled] = useState(false);
-  const [isFourthPageFilled, setIsFourthPageFilled] = useState(false);
-  const [isNavbarDisable, setIsNavbarDisable] = useState(false);
+ function reducer (state, action){
+  switch(action.type){
+    case 'SET_REGISTRATION_DATA':
+      return {
+     ...state,
+        registration_data: action.payload.registration_data,
+      }
+    case 'SET_PERSONAL_DATA':
+      return {
+     ...state,
+        personal_data: action.payload.personal_data,
+      }
+    case 'SET_EDUCATION_DATA':
+      return {
+     ...state,
+        education_data: action.payload.education_data,
+      }
+    case 'SET_JOB_DATA':
+      return {
+     ...state,
+        job_data: action.payload.job_data,
+      }
+    default:
+      return state
+  }
+ }
 
-  useEffect(() => {
-    const registration_form_data = JSON.parse(
-      window.localStorage.getItem("registration_details")
-    );
-    if (
-      registration_form_data &&
-      Object.keys(registration_form_data).length !== 0
-    ) {
-      setIsFirstPageFilled(true);
+ function NavBar(){
+  library.add(faCheck, faCheckDouble)
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const setNavbarDisplay = () =>{
+      const registrationForm = JSON.parse(window.localStorage.getItem("Registration Details"));
+      const personalForm = JSON.parse(window.localStorage.getItem("Personal Details"));
+      const educationForm = JSON.parse(window.localStorage.getItem("Education Details"));
+      const jobForm = JSON.parse(window.localStorage.getItem("Job Details"));
+      return dispatch({
+      payload: {
+        registration_data: registrationForm,
+        personal_data : personalForm,
+        education_data: educationForm,
+        job_data: jobForm
+      },
+    });
     }
-    const personal_form_data = JSON.parse(
-      window.localStorage.getItem("personal_details")
-    );
-    if (personal_form_data && Object.keys(personal_form_data).length !== 0) {
-      setIsSecondPageFilled(true);
-    }
-    const education_form_data = JSON.parse(
-      window.localStorage.getItem("education_details")
-    );
-    if (education_form_data && Object.keys(education_form_data).length !== 0) {
-      setIsThirdPageFilled(true);
-    }
-    const job_form_data = JSON.parse(
-      window.localStorage.getItem("experience_details")
-    );
-    if (job_form_data && Object.keys(job_form_data).length !== 0) {
-      setIsFourthPageFilled(true);
-    }
+
+    useEffect(() => {
+    setNavbarDisplay();
     if (window.location.pathname.match(/UserAllDataDisplay/)) {
       setIsNavbarDisable(true);
     } else {
@@ -50,129 +64,41 @@ function NavBar() {
     }
   }, []);
 
-  return (
+  const[isNavbarDisable, setIsNavbarDisable] = useState(false)
+
+  return(
     <>
       <div>
-        {isNavbarDisable ? (
-          <h1 className="text-3xl font-bold text-center mb-2 font-times-new-roman">
+        {isNavbarDisable ? (<h1 className="text-3xl font-bold text-center mb-2 font-times-new-roman">
             Please check your data here
-          </h1>
-        ) : (
-          <div>
-            <ol className="flex items-center w-full text-sm font-medium text-center text-gray-500 dark:text-gray-400 sm:text-base">
-              {isFirstPageFilled ? (
-                <li className="flex md:w-full items-center text-blue-600 dark:text-blue-500 sm:after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
-                  <span className="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
-                    <svg
-                      className="w-3.5 h-3.5 sm:w-4 sm:h-4 me-2.5"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-                    </svg>
-                    <span className="hidden sm:inline-flex sm:ms-2">
-                      Registered
-                    </span>
-                  </span>
+          </h1>) : (
+            <div>
+             <ol className="flex items-center w-full text-sm font-medium text-center text-gray-500 dark:text-gray-400 sm:text-base">
+              {state.registration_data  && state.registration_data ? (
+                <div className='bg-slate-300 mx-8 my-4 text-left gap-0 flex flex-nowrap w-50 h-10'>
+                <FontAwesomeIcon icon="fa-solid fa-check-double" className='pl-3 pt-3 text-green-600' />
+              <li className='pt-2 pl-2 pr-2 text-base text-green-600'>
+                    Registered 
+              </li> 
+                </div>
+                 ) : (
+                  <div className='bg-slate-300 mx-8 my-4 text-left gap-0 flex flex-nowrap w-50 h-10'>
+                  <FontAwesomeIcon icon="fa-solid fa-check" className='pl-3 pt-3 text-black'/>
+                  <li className='pt-2 pl-2 pr-2 text-base text-black'>
+                    Registration Info
                 </li>
-              ) : (
-                <li className="flex md:w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
-                  <span className="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
-                    <span className="me-2">1</span>
-                    Registration
-                    <span className="hidden sm:inline-flex sm:ms-2">Info</span>
-                  </span>
-                </li>
-              )}
-
-              {isSecondPageFilled ? (
-                <li className="flex md:w-full items-center text-blue-600 dark:text-blue-500 sm:after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
-                  <span className="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
-                    <svg
-                      className="w-3.5 h-3.5 sm:w-4 sm:h-4 me-2.5"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-                    </svg>
-                    <span className="hidden sm:inline-flex sm:ms-2">
-                      Added
-                    </span>
-                  </span>
-                </li>
-              ) : (
-                <li className="flex md:w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
-                  <span className="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
-                    <span className="me-2">2</span>
-                    Personal
-                    <span className="hidden sm:inline-flex sm:ms-2">Info</span>
-                  </span>
-                </li>
-              )}
-
-              {isThirdPageFilled ? (
-                <li className="flex md:w-full items-center text-blue-600 dark:text-blue-500 sm:after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
-                  <span className="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
-                    <svg
-                      className="w-3.5 h-3.5 sm:w-4 sm:h-4 me-2.5"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-                    </svg>
-                    <span className="hidden sm:inline-flex sm:ms-2">
-                      Added
-                    </span>
-                  </span>
-                </li>
-              ) : (
-                <li className="flex md:w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
-                  <span className="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
-                    <span className="me-2">3</span>
-                    Education
-                    <span className="hidden sm:inline-flex sm:ms-2">Info</span>
-                  </span>
-                </li>
-              )}
-
-              {isFourthPageFilled ? (
-                <li className="flex md:w-full items-center text-blue-600 dark:text-blue-500 sm:after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
-                  <span className="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
-                    <svg
-                      className="w-3.5 h-3.5 sm:w-4 sm:h-4 me-2.5"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-                    </svg>
-                    <span className="hidden sm:inline-flex sm:ms-2">
-                      Added
-                    </span>
-                  </span>
-                </li>
-              ) : (
-                <li className="flex md:w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
-                  <span className="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
-                    <span className="me-2">4</span>
-                    Job
-                    <span className="hidden sm:inline-flex sm:ms-2">Info</span>
-                  </span>
-                </li>
-              )}
-            </ol>
-          </div>
-        )}
+                </div>
+                )}
+             </ol>   
+            </div>
+          )}
       </div>
     </>
-  );
-}
+  )
+  
+ }
 
-export default NavBar;
+ export default NavBar;
+
+ //state.registration_data.value
+ //Object.keys(state.registration_data).includes('value')

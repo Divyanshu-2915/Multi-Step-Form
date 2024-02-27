@@ -9,6 +9,7 @@ import JobInfo from "./Form Pages/Page Form/UserJobData";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import UserDataDisplay from "./Form Pages/Page Form/UserAllDataDisplay";
 import NavBar from "./Form Pages/Navbar Form/navbar";
+import SampleJobInfo from "./Form Pages/Page Form/sample";
 
 function App() {
  // window.history.pushState(null, "", window.location.href);
@@ -56,7 +57,7 @@ function App() {
           </Router>
         )}
         */}
-        <JobInfo/>
+        <NavBar/>
       </div>
     </>
   );
