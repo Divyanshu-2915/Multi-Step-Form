@@ -1,17 +1,18 @@
 import * as Yup from "yup";
 
-function check_college_date() {
+function check_college_date(){
     const personal_data = JSON.parse(window.localStorage.getItem('Personal Details'));
     if(!personal_data){
-        return false;
+         console.log("wait");
     } 
     const find_birth_date = personal_data.date_of_birth;
     const college_start_date = new Date(find_birth_date);
     const college_end_date = new Date(find_birth_date);
     const yearsForStart = 18;
-    const yearsForEnd = 23;
+    const yearsForEnd = 25;
     college_start_date.setFullYear(college_start_date.getFullYear() + yearsForStart);
     college_end_date.setFullYear(college_end_date.getFullYear() + yearsForEnd);
+    console.log(college_start_date,college_end_date);
     return { college_start_date, college_end_date };
 }
 
@@ -26,7 +27,28 @@ export const Registration_Validate = Yup.object({
 export const Education_Validate = Yup.object({
     university: Yup.string().required('University name is required'),
     course: Yup.string().required('Course/Degree is required'),
-    date: Yup.date().required('Date of completion is required').test(
+    date: Yup.string().test('college-date', 'Date of completion must be within college years', 
+    function (value, message) {
+            const { college_start_date, college_end_date } = check_college_date();
+            const date = new Date(value);
+            if(date.getFullYear() < college_start_date.getFullYear())
+            {
+                console.log('start date error');
+                return ( message = 'Date of completion must be within college years');
+            } else if (date.getFullYear() > college_end_date.getFullYear()){
+                console.log('end date error');
+                return ( message ='Date of completion must be within college years');
+            } else {
+                console.log('good date');
+            }
+            return (value, message);
+        }).required('Date of completion is required'),
+    subject: Yup.string().required('This field is required'),
+    cgpa: Yup.number().required('CGPA is required').min(5.5, 'CGPA must be at least 4.5').max(10, 'CGPA cannot exceed 9.8')
+});
+
+{/*
+.test(
         'is-college-date',
         'Date of completion must be within college years',
         function (value) {
@@ -34,6 +56,13 @@ export const Education_Validate = Yup.object({
             return value >= college_start_date && value <= college_end_date;
         }
     ),
-    subject: Yup.string().required('This field is required'),
-    cgpa: Yup.number().required('CGPA is required').min(5.5, 'CGPA must be at least 4.5').max(10, 'CGPA cannot exceed 9.8')
-});
+//---
+
+Yup.addMethod(Yup.date(), 'checking_date', function() {
+    //const {message} = 'Date should be in college years';
+    return this.test("is-college-date", 'Date should be in college years', function(date) {
+        const {startDate, endDate} = check_college_date();
+        return (date >= startDate && date <= endDate);
+    })
+})
+ */}
