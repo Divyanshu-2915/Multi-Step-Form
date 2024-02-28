@@ -132,7 +132,7 @@ function UserDetails()
               {...register(field.name, { required: "This field is required", 
               ...(field.name === "number" && {
                     pattern: {
-                      value: /^\d+$/,
+                      value: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/,
                       message: "Please enter a valid phone number"
                     }}),
                     ...(field.name === "date_of_birth" && {

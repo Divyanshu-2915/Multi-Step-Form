@@ -55,7 +55,7 @@ function UserDataDisplay() {
     <div className="mb-4 relative">
         <h1 className="font-serif	text-2xl text-center text-slate-100
     drop-shadow-2xl shadow-cyan-900">User Registration Details</h1>
-        <div className='mb-4 mt-4 relative grid grid-cols-2 gap-4 text-center'>
+        <div className='mb-4 mt-4 relative grid grid-cols-2 gap-4 text-center bg-slate-400'>
           <p className="border border-blue-400/25 shadow-sm px-4 py-2 font-serif text-center text-slate-100">
           Email: {state.registration_details.email}</p>
           <p className="border border-blue-400/25 shadow-sm px-4 py-2 font-serif text-center text-slate-100">
