@@ -50,9 +50,6 @@ function UserDataDisplay() {
   return (
     <>
     <div className=" border-2 border-black pb-16 justify-items-center w-full max-h-max shadow-2xl shadow-slate-200" id="fourth-form">
-    <h1 className="font-serif	text-2xl text-center text-zinc-100
-    drop-shadow-2xl shadow-cyan-900 mb-2 mt-2 ">
-    Check Your Data Here</h1>
     <div className="container max-h-max-content	 w-screen mt-8 ml-8 pb-8 pt-8 px-8 justify-items-center rounded-lg
     bg-gradient-to-t from-cyan-400 to-blue-400 shadow-gray-400">
     <div className="mb-4 relative">

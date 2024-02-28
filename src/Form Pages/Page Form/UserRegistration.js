@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState } from "react";
 import { useFormik } from "formik";
 import { Registration_Validate } from "../Page Form";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -107,7 +107,7 @@ function UserRegistration() {
         })}
         <button type="submit"
                 className="bg-gradient-to-r from-cyan-500 to-blue-500 shadow-lg shadow-slate-500/50 
-                text-white font-bold py-2 px-4 rounded-lg w-80 hover:shadow-white fixed bottom-24">
+                text-white font-bold py-2 px-4 rounded-lg w-80 bottom-36 hover:shadow-white">
         Submit
         </button>
       </form>

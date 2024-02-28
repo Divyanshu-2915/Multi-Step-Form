@@ -62,7 +62,9 @@ function UserDetails()
     ]
   };
 
-  const {register, handleSubmit, formState: { errors }} = useForm({});
+  const {register, handleSubmit, formState: { errors }} = useForm({
+    mode: 'onBlur',
+  });
   const [stateCity, setStateCity] = useState([]);
   const CheckState = (event) => {
     const StateName = event.target.value;
@@ -101,7 +103,7 @@ function UserDetails()
               {field.heading === 'State' ? (
                <select
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            {...register("state", { required: "State is required" })}
+            {...register(field.name , { required: "State is required" })}
             onChange={CheckState}
            autoComplete="off">
             {StateData.States.map((states, index) => (
@@ -112,7 +114,7 @@ function UserDetails()
           </select> ):(  field.heading === 'City' ? (
           <select
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            {...register("city", { required: "City is required" })}
+            {...register(field.name, { required: "City is required" })}
           autoComplete="off">
             {stateCity.map((city, index) => (
               <option key={index} value={city}>
